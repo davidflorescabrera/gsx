@@ -1,0 +1,31 @@
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+zone "grup12.gsx" {
+	type master;
+	file "/etc/bind/db.grup12.gsx";
+};
+
+zone "12.17.172.in-addr.arpa" {
+	type master;
+	file "/etc/bind/grup12.gsx.db";
+};
+
+zone "interna" {
+	type master;
+	file "/etc/bind/db.interna";
+};
+
+zone "48.168.192.in-addr.arpa" {
+	type master;
+	file "/etc/bind/interna48.db";
+};
+
+zone "49.168.192.in-addr.arpa" {
+	type master;
+	file "/etc/bind/interna49.db";
+};

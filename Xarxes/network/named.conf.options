@@ -1,0 +1,13 @@
+options {
+	directory "/var/cache/bind";
+
+	 forwarders {
+	 	10.45.1.2;
+	 };
+
+	dnssec-validation false;
+	dnssec-enable yes;
+	
+	auth-nxdomain no;    # conform to RFC1035
+};
+

@@ -1,0 +1,25 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL	604800
+@	IN	SOA	ns.interna. root.ns.interna. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	ns.interna.
+ns	IN	A	192.168.48.1
+@	IN	MX	10 correu.interna.
+correu 	IN	A	192.168.48.15
+
+smtp	IN	CNAME	correu
+pop3	IN	CNAME	correu
+
+router	IN	CNAME	ns.interna.
+dhcp	IN	CNAME	ns.interna.
+
+pc1	IN	A	192.168.48.2
+pc2	IN	A	192.168.48.3
+pc3	IN 	A	192.168.49.2

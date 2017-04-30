@@ -1,0 +1,21 @@
+# generat automàticament per milax-xarxa-estàtica
+
+auto lo
+iface lo inet loopback
+
+allow-hotplug eth0
+iface eth0 inet static
+   address 192.168.48.1
+   netmask 255.255.254.0
+   broadcast 192.168.49.255
+   network 192.168.48.0
+
+allow-hotplug eth1
+iface eth1 inet dhcp
+
+allow-hotplug eth2
+iface eth2 inet static
+   address 172.17.12.1
+   netmask 255.255.255.0
+   broadcast 172.17.12.255
+   network 172.17.12.0

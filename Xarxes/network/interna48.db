@@ -1,0 +1,15 @@
+;
+; BIND reverse data file for local loopback interface
+;
+$TTL	604800
+@	IN	SOA	interna. root.interna. (
+			      1		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	interna.
+1	IN	PTR	router.interna.
+2	IN	PTR	pc1.interna.
+15	IN	PTR	correu.interna.

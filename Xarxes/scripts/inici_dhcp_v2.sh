@@ -63,12 +63,11 @@ router)
 		fi
 	done
 
+	apt-get update
+
 	for i in "${paquets[@]}"
 	do
-		if [ "$(dpkg-query -W -f='${Status}\n' $i 2> /dev/null >&1)" != "install ok installed" ]; then
-	      echo "Error: El paquet $i no esta instalat" >&2
-				exit 1
-	  fi
+		apt-get install "$i"
 	done
 
 	ifdown eth0
@@ -80,13 +79,12 @@ router)
 	read -n 1 -p "Conecta el cable d'eth2 i prem qualsevol tecla" </dev/tty
 	echo ""
 
-
-  	cp -p "$pathFiles"/interfacesRouter /etc/network/interfaces
-  	cp -p "$pathFiles"/dhcpd.conf /etc/dhcp/dhcpd.conf
-  	sed -i 's/%%MAC_address%%/'$4'/g' /etc/dhcp/dhcpd.conf
+  cp -p "$pathFiles"/interfacesRouter /etc/network/interfaces
+	cp -p "$pathFiles"/dhcpd.conf /etc/dhcp/dhcpd.conf
+	sed -i 's/%%MAC_address%%/'$4'/g' /etc/dhcp/dhcpd.conf
 	ifup eth0
 	ifup eth2
-  	/etc/init.d/isc-dhcp-server restart
+	/etc/init.d/isc-dhcp-server restart
 
 	echo “1” > /proc/sys/net/ipv4/ip_forward
 

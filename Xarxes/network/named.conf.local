@@ -1,31 +1,68 @@
-//
-// Do any local configuration here
-//
+view "interna" {
+	match-clients { 
+		192.168.48.0/23;
+		localhost;
+	};
+	recursion yes;
 
-// Consider adding the 1918 zones here, if they are not used in your
-// organization
-//include "/etc/bind/zones.rfc1918";
-zone "grup12.gsx" {
-	type master;
-	file "/etc/bind/db.grup12.gsx";
+	zone "interna" {
+		type master;
+		file "/etc/bind/db.interna";
+	};
+
+	zone "48.168.192.in-addr.arpa" {
+		type master;
+		file "/etc/bind/interna48.db";
+	};
+
+	zone "49.168.192.in-addr.arpa" {
+		type master;
+		file "/etc/bind/interna49.db";
+	};
+
+	zone "grup12.gsx" {
+		type master;
+		file "/etc/bind/db.grup12.gsx";
+	};
+
+	zone "12.17.172.in-addr.arpa" {
+		type master;
+		file "/etc/bind/grup12.gsx.db";
+	};
 };
 
-zone "12.17.172.in-addr.arpa" {
-	type master;
-	file "/etc/bind/grup12.gsx.db";
+view "grup12" {
+	match-clients { 
+		172.17.12.0/24;
+	};
+	recursion yes;
+
+
+	zone "grup12.gsx" {
+		type master;
+		file "/etc/bind/db.grup12.gsx";
+	};
+
+	zone "12.17.172.in-addr.arpa" {
+		type master;
+		file "/etc/bind/grup12.gsx.db";
+	};
 };
 
-zone "interna" {
-	type master;
-	file "/etc/bind/db.interna";
+view "externa" {
+	match-clients { 
+		any;
+	};
+	recursion no;
+
+	zone "grup12.gsx" {
+		type master;
+		file "/etc/bind/db.externa";
+	};
+
+	zone "3.0.10.in-addr.arpa" {
+		type master;
+		file "/etc/bind/externa.db";
+	};
 };
 
-zone "48.168.192.in-addr.arpa" {
-	type master;
-	file "/etc/bind/interna48.db";
-};
-
-zone "49.168.192.in-addr.arpa" {
-	type master;
-	file "/etc/bind/interna49.db";
-};

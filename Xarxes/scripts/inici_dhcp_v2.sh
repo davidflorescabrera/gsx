@@ -89,11 +89,14 @@ router)
 	echo “1” > /proc/sys/net/ipv4/ip_forward
 
 	cp -p "$pathFiles"/named.conf.local /etc/bind/named.conf.local
+	cp -p "$pathFiles"/named.conf /etc/bind/named.conf
 	cp -p "$pathFiles"/named.conf.options /etc/bind/named.conf.options
 	cp -p "$pathFiles"/db.grup12.gsx /etc/bind/db.grup12.gsx
 	cp -p "$pathFiles"/grup12.gsx.db /etc/bind/grup12.gsx.db
 	cp -p "$pathFiles"/interna48.db /etc/bind/interna48.db
 	cp -p "$pathFiles"/interna49.db /etc/bind/interna49.db
+	cp -p "$pathFiles"/externa.db /etc/bind/externa.db
+	cp -p "$pathFiles"/db.externa /etc/bind/db.externa
 	cp -p "$pathFiles"/db.interna /etc/bind/db.interna
 	cp -p "$pathFiles"/resolv.conf /etc/resolv.conf
 

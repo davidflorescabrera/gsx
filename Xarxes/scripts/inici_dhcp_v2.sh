@@ -4,7 +4,7 @@
 # Date: 24/03/2017
 # Description:
 usage="$(basename "$0") -- "
-usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ./inici_dhcp_v2.sh rol pathFitxers pathScripts [serverMacAdress]\nOn el rol pot ser client, router o servidor. Si es router a mes a mes s'ha d'especificar la MAC del servidor. \n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
+usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ./inici_dhcp_v2.sh rol pathFitxers pathScripts [serverMacAdress] [IPExterna]\nOn el rol pot ser client, router o servidor. Si es router a mes a mes s'ha d'especificar la MAC del servidor. \n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
 Aquest script el que fa és copiarnos la configuració per l'interfaces depenent si som un router o un client. (client i servidor)\n
 En cas de estar a la configuració del router copiarem la MAC que se'ns proporciona per paràmetre al fitxer dhcp.conf al lloc necessàri, tot activant\n
 el servei isc-dhcp-server i possant a 1 el ip_forward.\nTambé es configurarà el servei DNS.
@@ -87,8 +87,18 @@ router)
 	/etc/init.d/isc-dhcp-server restart
 
 	echo “1” > /proc/sys/net/ipv4/ip_forward
+	
+	num1=echo "$5" | cut -d'.' -f 1
+	num2=echo "$5" | cut -d'.' -f 2
+	num3=echo "$5" | cut -d'.' -f 3	
+	num4=echo "$5" | cut -d'.' -f 4	
 
 	cp -p "$pathFiles"/named.conf.local /etc/bind/named.conf.local
+	sed -i 's/%%NUM1%%/'$num1'/g' /etc/bind/externa.db
+	sed -i 's/%%NUM2%%/'$num2'/g' /etc/bind/externa.db
+	sed -i 's/%%NUM3%%/'$num3'/g' /etc/bind/externa.db
+	
+
 	cp -p "$pathFiles"/named.conf /etc/bind/named.conf
 	cp -p "$pathFiles"/named.conf.options /etc/bind/named.conf.options
 	cp -p "$pathFiles"/db.grup12.gsx /etc/bind/db.grup12.gsx
@@ -97,8 +107,7 @@ router)
 	cp -p "$pathFiles"/interna49.db /etc/bind/interna49.db
 	
 	cp -p "$pathFiles"/externa.db /etc/bind/externa.db
-	num=echo "$5" | cut -d'.' -f 4
-	sed -i 's/%%NUM%%/'$num'/g' /etc/bind/externa.db
+	sed -i 's/%%NUM%%/'$num4'/g' /etc/bind/externa.db
 	
 	cp -p "$pathFiles"/db.externa /etc/bind/db.externa
 	sed -i 's/%%IP_Externa%%/'$5'/g' /etc/bind/db.externa

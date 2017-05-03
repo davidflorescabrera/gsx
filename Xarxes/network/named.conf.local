@@ -60,7 +60,7 @@ view "externa" {
 		file "/etc/bind/db.externa";
 	};
 
-	zone "3.0.10.in-addr.arpa" {
+	zone "%%NUM3%%.%%NUM2%%.%%NUM1%%.in-addr.arpa" {
 		type master;
 		file "/etc/bind/externa.db";
 	};

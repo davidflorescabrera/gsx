@@ -10,9 +10,9 @@ $TTL	604800
 			 604800 )	; Negative Cache TTL
 ;
 @	IN	NS	grup12.gsx.
-15	IN	PTR	router.grup12.gsx.
-15	IN	PTR	taller.grup12.gsx.
-15	IN	PTR	correu.grup12.gsx.
+%%NUM%%	IN	PTR	router.grup12.gsx.
+%%NUM%%	IN	PTR	taller.grup12.gsx.
+%%NUM%%	IN	PTR	correu.grup12.gsx.
 
 
 

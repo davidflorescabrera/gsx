@@ -95,8 +95,14 @@ router)
 	cp -p "$pathFiles"/grup12.gsx.db /etc/bind/grup12.gsx.db
 	cp -p "$pathFiles"/interna48.db /etc/bind/interna48.db
 	cp -p "$pathFiles"/interna49.db /etc/bind/interna49.db
+	
 	cp -p "$pathFiles"/externa.db /etc/bind/externa.db
+	num=echo "$5" | cut -d'.' -f 4
+	sed -i 's/%%NUM%%/'$num'/g' /etc/bind/externa.db
+	
 	cp -p "$pathFiles"/db.externa /etc/bind/db.externa
+	sed -i 's/%%IP_Externa%%/'$5'/g' /etc/bind/db.externa
+	
 	cp -p "$pathFiles"/db.interna /etc/bind/db.interna
 	cp -p "$pathFiles"/resolv.conf /etc/resolv.conf
 

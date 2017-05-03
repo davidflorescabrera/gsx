@@ -10,9 +10,9 @@ $TTL	604800
 			 604800 )	; Negative Cache TTL
 ;
 @	IN	NS	ns.grup12.gsx.
-ns	IN	A	10.0.3.15
+ns	IN	A	%%IP_Externa%%
 @	IN	MX	10 correu.grup12.gsx.
-correu	IN	A	10.0.3.15
+correu	IN	A	%%IP_Externa%%
 
 smtp	IN	CNAME	correu
 pop3	IN	CNAME	correu
@@ -21,7 +21,7 @@ router	IN	CNAME	ns.grup12.gsx.
 dhcp	IN	CNAME	ns.grup12.gsx.
 
 
-www.taller IN	A	10.0.3.15
+www.taller IN	A	%%IP_Externa%%
 www.tenda  IN	CNAME	www.taller
 taller  IN	CNAME	www.taller
 tenda  IN	CNAME	www.taller

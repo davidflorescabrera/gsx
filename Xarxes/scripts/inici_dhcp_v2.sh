@@ -17,7 +17,7 @@ if [ "$1" == "-h" ] || [ "$1" == "help" ]; then
 	exit 0
 fi
 
-if ! (([ "$1" == "router" ] && [ $# -eq 4 ]) || ([ "$1" == "client" ] && [ $# -eq 3 ]) || ([ "$1" == "server" ] && [ $# -eq 3 ]));then
+if ! (([ "$1" == "router" ] && [ $# -eq 5 ]) || ([ "$1" == "client" ] && [ $# -eq 3 ]) || ([ "$1" == "server" ] && [ $# -eq 3 ]));then
 		echo -e "Ús: ./inici_dhcp_v2.sh rol pathFitxers pathScripts [serverMacAdress]\nOn el rol pot ser client, router o servidor. Si es router a mes a mes s'ha d'especificar la MAC del servidor."
 	exit 1
 fi
@@ -79,19 +79,19 @@ router)
 	read -n 1 -p "Conecta el cable d'eth2 i prem qualsevol tecla" </dev/tty
 	echo ""
 
-  cp -p "$pathFiles"/interfacesRouter /etc/network/interfaces
+	cp -p "$pathFiles"/interfacesRouter /etc/network/interfaces
 	cp -p "$pathFiles"/dhcpd.conf /etc/dhcp/dhcpd.conf
 	sed -i 's/%%MAC_address%%/'$4'/g' /etc/dhcp/dhcpd.conf
 	ifup eth0
 	ifup eth2
 	/etc/init.d/isc-dhcp-server restart
 
-	echo “1” > /proc/sys/net/ipv4/ip_forward
+	echo "1" > /proc/sys/net/ipv4/ip_forward
 	
-	num1=echo "$5" | cut -d'.' -f 1
-	num2=echo "$5" | cut -d'.' -f 2
-	num3=echo "$5" | cut -d'.' -f 3	
-	num4=echo "$5" | cut -d'.' -f 4	
+	num1=$(echo "$5" | cut -d'.' -f 1)
+	num2=$(echo "$5" | cut -d'.' -f 2)
+	num3=$(echo "$5" | cut -d'.' -f 3)	
+	num4=$(echo "$5" | cut -d'.' -f 4)	
 
 	cp -p "$pathFiles"/named.conf.local /etc/bind/named.conf.local
 	sed -i 's/%%NUM1%%/'$num1'/g' /etc/bind/externa.db

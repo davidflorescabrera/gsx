@@ -37,7 +37,7 @@ if [ ! -e "$pathScripts"/backup_interfaces.sh ]; then
 fi
 
 files=( "interfacesRouter" "dhcpd.conf" "named.conf.local" "named.conf.options" "db.grup12.gsx" "grup12.gsx.db" "db.interna" "interna48.db" "interna49.db" "resolv.conf")
-paquets=( "isc-dhcp-server" "bind9" "bind9-doc" "dnsutils" )
+paquets=( "isc-dhcp-server" "bind9" "bind9-doc" "dnsutils")
 
 read -p "Abans de seguir, vols realitzar una copia de seguretat de la configuració actual? [s/n]" </dev/tty
 if [[ $REPLY =~ [sSyY] ]]; then
@@ -51,6 +51,7 @@ if [[ $REPLY =~ [sSyY] ]]; then
 fi
 
 ifconfig docker0 down
+apt-get install openssh-server
 
 case $1 in
 router)
@@ -116,6 +117,12 @@ router)
 	cp -p "$pathFiles"/resolv.conf /etc/resolv.conf
 
 	/etc/init.d/bind9 restart
+
+	iptables -t nat -A POSTROUTING -s 192.168.48.0/23 -o eth1 -j MASQUERADE
+ 	iptables -t nat -A POSTROUTING -s 172.17.12.0/24 -o eth1 -j MASQUERADE
+	iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 80 -j DNAT --to-destination 172.17.12.2
+	iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 443 -j DNAT --to-destination 172.17.12.2
+	iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 23 -j DNAT --to-destination 172.17.12.2:22
 
 	echo "Vols comprovar connexió amb el pc1 i la tenda?"
 	read -p "Es fara ping fins a obtenir resposta. (maxim 10 pings) [s/n] " </dev/tty

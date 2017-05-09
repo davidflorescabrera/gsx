@@ -39,3 +39,4 @@ fi
 
 cp -p /etc/resolv.conf /gsx/network/
 cp -p /etc/network/interfaces /gsx/network/
+iptables-save > /gsx/network/iptables

@@ -118,14 +118,6 @@ router)
 
 	/etc/init.d/bind9 restart
 
-	rm -r /var/www/*
-	cp -rp "$pathFiles"/webserver/www/* /var/www/
-	cp -p "$pathFiles"/webserver/taller.conf /etc/apache2/sites-available/taller.conf
-	cp -p "$pathFiles"/webserver/tenda.conf /etc/apache2/sites-available/tenda.conf
-	a2ensite tenda
-	a2ensite taller
-	service apache2 start
-
 	iptables -t nat -A POSTROUTING -s 192.168.48.0/23 -o eth1 -j MASQUERADE
  	iptables -t nat -A POSTROUTING -s 172.17.12.0/24 -o eth1 -j MASQUERADE
 	iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 80 -j DNAT --to-destination 172.17.12.2
@@ -170,6 +162,7 @@ router)
 	;;
 client|server)
 
+
 	if [ ! -e "$pathFiles"/interfacesClient ]; then
 			echo "El fitxer interfacesClient no existeix. S'ha d'afegir al directori $pathFiles" >&2
 			exit 1
@@ -195,6 +188,16 @@ client|server)
 
 	cp -p "$pathFiles"/interfacesClient /etc/network/interfaces
 	ifup eth0
+
+	if [ "$1" == "server" ]; then 
+		rm -r /var/www/*
+		cp -rp "$pathFiles"/webserver/www/* /var/www/
+		cp -p "$pathFiles"/webserver/taller.conf /etc/apache2/sites-available/taller.conf
+		cp -p "$pathFiles"/webserver/tenda.conf /etc/apache2/sites-available/tenda.conf
+		a2ensite tenda
+		a2ensite taller
+		service apache2 start
+	fi
 
 	echo "Vols comprovar connexió amb el router?"
 	read -p "Es fara ping fins a obtenir resposta. (maxim 10 pings) [s/n] " </dev/tty

@@ -1,4 +1,0 @@
-AuthType Basic
-AuthName "Zona privada. Si us plau, introduïu el password"
-AuthUserFile ./.htpasswd
-Require valid-user

@@ -1,0 +1,18 @@
+;
+; BIND reverse data file for local loopback interface
+;
+$TTL	604800
+@	IN	SOA	grup12.gsx. root.grup12.gsx. (
+			      1		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	grup12.gsx.
+%%NUM%%	IN	PTR	router.grup12.gsx.
+%%NUM%%	IN	PTR	taller.grup12.gsx.
+%%NUM%%	IN	PTR	correu.grup12.gsx.
+
+
+

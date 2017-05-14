@@ -36,8 +36,8 @@ if [ ! -e "$pathScripts"/backup_interfaces.sh ]; then
 		exit 1
 fi
 
-files=( "interfacesRouter" "dhcpd.conf" "named.conf.local" "named.conf.options" "db.grup12.gsx" "grup12.gsx.db" "db.interna" "interna48.db" "interna49.db" "resolv.conf")
-paquets=( "isc-dhcp-server" "bind9" "bind9-doc" "dnsutils")
+files=( "interfacesRouter" "dhcpd.conf" "named.conf.local" "named.conf.options" "db.grup12.gsx" "grup12.gsx.db" "db.interna" "interna48.db" "interna49.db" "resolv.conf" "/webserver/taller.conf" "/webserver/tenda.conf" "/webserver/www/html/index.html" "/webserver/www/taller/index.html" "/webserver/www/tenda/index.html" "/webserver/www/taller/.htaccess" "/webserver/www/taller/.htpasswd")
+paquets=( "isc-dhcp-server" "bind9" "bind9-doc" "dnsutils" "openssh-server")
 
 read -p "Abans de seguir, vols realitzar una copia de seguretat de la configuració actual? [s/n]" </dev/tty
 if [[ $REPLY =~ [sSyY] ]]; then
@@ -88,17 +88,17 @@ router)
 	/etc/init.d/isc-dhcp-server restart
 
 	echo "1" > /proc/sys/net/ipv4/ip_forward
-	
+
 	num1=$(echo "$5" | cut -d'.' -f 1)
 	num2=$(echo "$5" | cut -d'.' -f 2)
-	num3=$(echo "$5" | cut -d'.' -f 3)	
-	num4=$(echo "$5" | cut -d'.' -f 4)	
+	num3=$(echo "$5" | cut -d'.' -f 3)
+	num4=$(echo "$5" | cut -d'.' -f 4)
 
 	cp -p "$pathFiles"/named.conf.local /etc/bind/named.conf.local
 	sed -i 's/%%NUM1%%/'$num1'/g' /etc/bind/externa.db
 	sed -i 's/%%NUM2%%/'$num2'/g' /etc/bind/externa.db
 	sed -i 's/%%NUM3%%/'$num3'/g' /etc/bind/externa.db
-	
+
 
 	cp -p "$pathFiles"/named.conf /etc/bind/named.conf
 	cp -p "$pathFiles"/named.conf.options /etc/bind/named.conf.options
@@ -106,13 +106,13 @@ router)
 	cp -p "$pathFiles"/grup12.gsx.db /etc/bind/grup12.gsx.db
 	cp -p "$pathFiles"/interna48.db /etc/bind/interna48.db
 	cp -p "$pathFiles"/interna49.db /etc/bind/interna49.db
-	
+
 	cp -p "$pathFiles"/externa.db /etc/bind/externa.db
 	sed -i 's/%%NUM%%/'$num4'/g' /etc/bind/externa.db
-	
+
 	cp -p "$pathFiles"/db.externa /etc/bind/db.externa
 	sed -i 's/%%IP_Externa%%/'$5'/g' /etc/bind/db.externa
-	
+
 	cp -p "$pathFiles"/db.interna /etc/bind/db.interna
 	cp -p "$pathFiles"/resolv.conf /etc/resolv.conf
 
@@ -189,7 +189,7 @@ client|server)
 	cp -p "$pathFiles"/interfacesClient /etc/network/interfaces
 	ifup eth0
 
-	if [ "$1" == "server" ]; then 
+	if [ "$1" == "server" ]; then
 		rm -r /var/www/*
 		cp -rp "$pathFiles"/webserver/www/* /var/www/
 		cp -p "$pathFiles"/webserver/taller.conf /etc/apache2/sites-available/taller.conf

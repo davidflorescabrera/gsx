@@ -47,6 +47,21 @@ view "grup12" {
 		type master;
 		file "/etc/bind/grup12.gsx.db";
 	};
+
+	zone "interna" {
+		type master;
+		file "/etc/bind/db.interna";
+	};
+
+	zone "48.168.192.in-addr.arpa" {
+		type master;
+		file "/etc/bind/interna48.db";
+	};
+
+	zone "49.168.192.in-addr.arpa" {
+		type master;
+		file "/etc/bind/interna49.db";
+	};
 };
 
 view "externa" {

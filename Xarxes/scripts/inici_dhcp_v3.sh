@@ -4,7 +4,7 @@
 # Date: 24/03/2017
 # Description:
 usage="$(basename "$0") -- "
-usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ./inici_dhcp_v2.sh rol pathFitxers pathScripts [serverMacAdress] [IPExterna]\nOn el rol pot ser client, router o servidor. Si es router a mes a mes s'ha d'especificar la MAC del servidor. \n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
+usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ./inici_dhcp_v3.sh rol pathFitxers pathScripts [serverMacAdress] [IPPublica]\nOn el rol pot ser client, router o servidor. Si es router a mes a mes s'ha d'especificar la MAC del servidor. \n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
 Aquest script el que fa és copiarnos la configuració per l'interfaces depenent si som un router o un client. (client i servidor)\n
 En cas de estar a la configuració del router copiarem la MAC que se'ns proporciona per paràmetre al fitxer dhcp.conf al lloc necessàri, tot activant\n
 el servei isc-dhcp-server i possant a 1 el ip_forward.\nTambé es configurarà el servei DNS.
@@ -18,7 +18,7 @@ if [ "$1" == "-h" ] || [ "$1" == "help" ]; then
 fi
 
 if ! (([ "$1" == "router" ] && [ $# -eq 5 ]) || ([ "$1" == "client" ] && [ $# -eq 3 ]) || ([ "$1" == "server" ] && [ $# -eq 3 ]));then
-		echo -e "Ús: ./inici_dhcp_v2.sh rol pathFitxers pathScripts [serverMacAdress]\nOn el rol pot ser client, router o servidor. Si es router a mes a mes s'ha d'especificar la MAC del servidor."
+		echo -e "Ús: ./inici_dhcp_v3.sh rol pathFitxers pathScripts [serverMacAdress] [IPPublica]\nOn el rol pot ser client, router o servidor. Si es router a mes a mes s'ha d'especificar la MAC del servidor."
 	exit 1
 fi
 

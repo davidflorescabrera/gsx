@@ -1,7 +1,7 @@
 #! /bin/bash
 # Author: Joan Boronat, David Flores and Miquel Sabate
-# Version: 1.0
-# Date: 24/03/2017
+# Version: 3.0
+# Date: 15/05/2017
 # Description:
 usage="$(basename "$0") -- "
 usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ./inici_dhcp_v3.sh rol pathFitxers pathScripts [serverMacAdress] [IPPublica]\nOn el rol pot ser client, router o servidor. Si es router a mes a mes s'ha d'especificar la MAC del servidor. \n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)

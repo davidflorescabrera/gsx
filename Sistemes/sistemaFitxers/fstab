@@ -1,0 +1,6 @@
+# /etc/fstab: static file system information.
+# fet a mida per a milax-labdeim-rembo
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+LABEL=d64	/		ext2	errors=remount-ro 0       1
+/dev/sda6	/home		ext2    auto              0       2
+/dev/sda7	/mnt		ext2	auto		  0	  2

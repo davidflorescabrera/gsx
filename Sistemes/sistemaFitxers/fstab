@@ -3,4 +3,4 @@
 # <file system> <mount point>   <type>  <options>       <dump>  <pass>
 LABEL=d64	/		ext2	errors=remount-ro 0       1
 /dev/sda6	/home		ext2    auto              0       2
-/dev/sda7	/mnt		ext2	auto		  0	  2
+/dev/sda7	/tmp		ext2	auto		  0	  2

@@ -1,0 +1,52 @@
+Per mostrar els discos que tenim: df
+Per veure les particions del disc: sudo fdisk -l /dev/sda
+
+swapon
+
+more /etc/fstab , si volem canviar els muntatges de forma diferent haurem de modificar aquest fitxer
+mkfs --> fem un sistema de fitxers, li podem dir:
+	-t : tipus
+	.ext2 ens fa la crida a aquesta altra versió
+
+mount: volem escriure dintre el disc però el volem tenir muntat, haurem de muntar un únic sistema de fitxers.
+
+dd: converteix i copia un fitxer, volca tot un sistema de fitxers sobre una partició. També es poden crear fitxers contigus d'una determinada quantitat de bytes (per fer-lo traballar amb swap ho necessitarem).
+
+tune2fs --> ens permet mirar paràmetres i modificar-los.
+	tune2fs -l /dev/sda5
+
+debugfs --> ens serveix per modificar coses. Si tenim un ext3 o ext4 el que podem fer es la recuperació de fitxers que hem perdut. Si volem que un bloc de dades no ens escrigui els hi podem dir que certs inodes estan com ocuptas o malaments i llavors manté la informació que nosaltres volguem. 
+
+ln -s --> softlink d'un fitxer a un altre, o d'un directori a un altre lloc. 
+
+primer hem de fer swapoff /dev/sda6
+mkfs.ext2 -m 10 /dev/sda6
+
+	Creating filesystem with 248999 4k blocks and 62336 inodes
+	Filesystem UUID: 9c28d83c-6a57-4869-aa66-08b7b980a3af
+	Còpies de seguretat del superbloc desades en els blocs: 
+		32768, 98304, 163840, 229376
+
+	Allocating group tables: fet                            
+	Escriptura de les taules de nodes-i:fet                            
+	Escriptura de la informació dels súperblocs i de comptabilitat del sistema 	de fitxers:fet
+
+df --> veurem que esta montat.
+
+PROCES:
+
+root@d106:/# mount /dev/sda6 /mnt
+root@d106:/# df
+root@d106:/# man cp 
+root@d106:/# cp -a /home /mnt
+root@d106:/# ls -l /mnt
+root@d106:/# ls -l /mnt/home
+root@d106:/# mv /mnt/home/milax /mnt/milax
+root@d106:/# ls -l /mnt/home
+root@d106:/# rmdir /mnt/home
+root@d106:/# umount /mnt
+root@d106:/# mount /dev/sda6 /home
+root@d106:/# ls -l /home
+root@d106:/# df
+
+

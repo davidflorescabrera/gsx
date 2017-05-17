@@ -33,7 +33,10 @@ mkfs.ext2 -m 10 /dev/sda6
 
 df --> veurem que esta montat.
 
-PROCES:
+PROCES SDA6:
+
+primer hem de fer swapoff /dev/sda6
+mkfs.ext2 -m 10 /dev/sda6
 
 root@d106:/# mount /dev/sda6 /mnt
 root@d106:/# df
@@ -48,5 +51,52 @@ root@d106:/# umount /mnt
 root@d106:/# mount /dev/sda6 /home
 root@d106:/# ls -l /home
 root@d106:/# df
+
+PROCES SDA7:
+
+root@d116:/home/milax/Desktop/gsx# mkfs.ext2 /dev/sda7
+	mke2fs 1.42.12 (29-Aug-2014)
+	Creating filesystem with 6249277 4k blocks and 1564672 inodes
+	Filesystem UUID: e750b673-b05a-423d-bb8c-a3995967edae
+	Còpies de seguretat del superbloc desades en els blocs: 
+		32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, 
+		4096000
+
+	Allocating group tables: fet                            
+	Escriptura de les taules de nodes-i:fet                            
+	Escriptura de la informació dels súperblocs i de comptabilitat del sistema de fitxers:fet    
+
+root@d116:/home/milax/Desktop/gsx# mount /dev/sda7 /mnt
+root@d116:/home/milax/Desktop/gsx# cp -a /tmp /mnt
+root@d116:/home/milax/Desktop/gsx# cp -a /var/local /mnt
+root@d116:/home/milax/Desktop/gsx# ls -l /mnt
+root@d116:/home/milax/Desktop/gsx# ls -l /mnt/local/
+root@d116:/home/milax/Desktop/gsx# ls -l /mnt/tmp
+root@d116:/home/milax/Desktop/gsx# mv /mnt/tmp/* /mnt/
+root@d116:/home/milax/Desktop/gsx# ls /mnt/tmp/
+root@d116:/home/milax/Desktop/gsx# rmdir /mnt/tmp/
+	rmdir: no s’ha pogut eliminar «/mnt/tmp/»: El directori no és buit
+root@d116:/home/milax/Desktop/gsx# cp -a /mnt/tmp/* /mnt/
+	cp: ha fallat stat() sobre «/mnt/tmp/*»: El fitxer o directori no existeix
+root@d116:/home/milax/Desktop/gsx# ls -l /mnt/tmp/
+root@d116:/home/milax/Desktop/gsx# ls -la /mnt/tmp/
+root@d116:/home/milax/Desktop/gsx# ls /mnt/
+	local  lost+found  ssh-49JpCdbxu6ap  tmp
+root@d116:/home/milax/Desktop/gsx# umount /mnt
+root@d116:/home/milax/Desktop/gsx# mount /dev/sda7 /tmp
+root@d116:/home/milax/Desktop/gsx# ls -l /tmp/
+root@d116:/home/milax/Desktop/gsx# df
+
+crear fitxer de swap de 16MB:
+root@d116:/home/milax/Desktop/gsx# cd /tmp/
+root@d116:/tmp# dd if=/dev/zero of=/media/swapfile bs=1M count=16
+root@d116:/tmp# mkswap /media/swapfile
+root@d116:/tmp# swapon /media/swapfile
+Comprovar:
+	root@d116:/tmp# free
+	root@d116:/tmp# cat /proc/swaps
+
+	
+
 
 

@@ -34,3 +34,16 @@ done
 rmdir /mnt/home
 umount /mnt
 mount /dev/sda6 /home
+
+#SDA7
+mount /dev/sda7 /mnt
+cp -a /tmp /mnt
+cp -a /var/local /mnt
+mv /mnt/tmp/* /mnt/
+cp -a /mnt/tmp/* /mnt/
+umount /mnt
+mount /dev/sda7 /tmp
+cd /tmp/
+dd if=/dev/zero of=/media/swapfile bs=1M count=16
+mkswap /media/swapfile
+swapon /media/swapfile

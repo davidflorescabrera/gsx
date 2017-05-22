@@ -4,7 +4,7 @@
 # Date: 22/05/2017
 # Description:
 usage="$(basename "$0") -- "
-usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ex1dispo.sh \n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
+usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ex1dispo.sh disk_size\n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
 Aquest script crea un disc virtual a memòria usant el format tmpfs de mida especificada al paràmetre d'entrada.
 Aquest disc estarà muntat a /mnt/mem. Cal destacar que com no utilitzem el fstab no serà persistent aquest disc i un
 cop apaguem i encenem la màquina el disc s'esborra. \n

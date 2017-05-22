@@ -5,7 +5,9 @@
 # Description:
 usage="$(basename "$0") -- "
 usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ex1dispo.sh \n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
-Aquest script crea un sistema de fitxers del tipus ext2 on la part reservada per root es del 10% i s'assigna tot l'arbre de directoris que està sota /home. A la partició arrel només es deixarà l'usuari root \n
+Aquest script crea un disc virtual a memòria usant el format tmpfs de mida especificada al paràmetre d'entrada.
+Aquest disc estarà muntat a /mnt/mem. Cal destacar que com no utilitzem el fstab no serà persistent aquest disc i un
+cop apaguem i encenem la màquina el disc s'esborra. \n
 Ubicació de l'script: /GSX\n
 Permisos: 744 (propietari pot llegir, escriure i executar l'script. Grup i altres només poden llegir-lo.)"
 size="$1"

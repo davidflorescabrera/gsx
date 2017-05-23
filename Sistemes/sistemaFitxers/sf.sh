@@ -21,6 +21,14 @@ if [ "$1" == "-h" ] || [ "$1" == "help" ]; then
 	exit 0
 fi
 
+#Comprovació usuari root
+if [ $EUID -ne 0 ]; then
+	echo "Aquest script ha de ser executat com a root"
+	exit 1
+fi
+
+cp -p ./fstab /etc/fstab
+
 swapoff /dev/sda6
 mkfs.ext2 -m 10 /dev/sda6
 mount /dev/sda6 /mnt

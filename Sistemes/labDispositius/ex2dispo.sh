@@ -5,15 +5,9 @@
 # Description:
 usage="$(basename "$0") -- "
 usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ex2dispo.sh \n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
-Crea una impresora per convertir els fitxers a PDF i guardar-los sota el directori /mnt/mem/DocsPDF/${USER} \n
+Crea una impresora per convertir els fitxers a PDF i guardar-los sota el directori /mnt/mem/USER/DocsPDF \n
 Ubicació de l'script: /GSX\n
 Permisos: 744 (propietari pot llegir, escriure i executar l'script. Grup i altres només poden llegir-lo.)"
-
-#Comprovació número de parámetres
-if [ $# -ne 1 ]; then
-	echo "Us: ex1dispo.sh disk_size"
-     	exit 1
-fi
 
 #Comanda help
 if [ "$1" == "-h" ] || [ "$1" == "help" ]; then
@@ -21,8 +15,34 @@ if [ "$1" == "-h" ] || [ "$1" == "help" ]; then
 	exit 0
 fi
 
-#primer comprovar que el cups-pdf està instal·lat, sino instalar-lo
-# impressio de prova i funciona: lp /usr/share/cups/data/testprint FUNCIONA!
-#el cups-pdf te un fitxer de configuració al /etc/cups/cups-pdf.conf (configurar-lo com ens demana) i copiarlo a aquest dir, i per 
-#defecte els fitxers s'escriuen al /var/spool/cups-pdf/${USER} redirigir-los al que ens interesa
-#crear la impresora amb lpadmin -p virtualImpre -E -v /mnt/mem/DocsPDF/${USER}
+#Comprovació número de parámetres
+if [ $# -ne 0 ]; then
+	echo "Us: ex2dispo.sh"
+     	exit 1
+fi
+
+#Comprovació usuari root
+if [ $EUID -ne 0 ]; then
+	echo "Aquest script ha de ser executat com a root"
+	exit 1
+fi
+
+#instal·lem el cups-pdf per si no el teniem
+apt-get install cups-pdf 
+
+#Comprovem que els directoris necessàris existeixen i sinó els creem
+if [ ! -e /mnt/mem ]; then
+	mkdir /mnt/mem
+fi
+
+#Copiem el fitxer de configuració del cups-pdf al directori del sistema
+cp ./cups-pdf.conf /etc/cups/cups-pdf.conf
+
+#Creem la impresora virtual 
+lpadmin -p virtualImpre -E -v /mnt/mem/${USER}/DocsPDF
+
+#Fem una impressio de prova per veure que funciona
+lp /usr/share/cups/data/testprint
+
+echo -e "Hem imprès un doc de prova per comprovar el funcionament."
+

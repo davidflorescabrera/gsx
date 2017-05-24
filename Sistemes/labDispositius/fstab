@@ -1,4 +1,4 @@
 # /etc/fstab: static file system information.
 # fet a mida per a milax-labdeim-rembo
 # <file system> <mount point>   <type>  <options>       <dump>  <pass>
-tmpfs		/mnt/mem	tmpfs	node,nosuid,size=100M	0	0
+tmpfs		/mnt/mem	tmpfs	nodev,nosuid,size=100M	0	0

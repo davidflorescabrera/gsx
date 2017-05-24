@@ -8,6 +8,4 @@
 # /srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)
 # /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
 #
-/home/remots/usuari1 10.21.1.5(rw, all_squash, anonuid=1005)
-/home/remots/usuari2 10.21.1.6(rw, all_squash, anonuid=1006)
-/home/remots/usuari3 10.21.1.8(rw, all_squash, anonuid=1008)
+/home/remots/ 10.21.1.0/24(rw,all_squash)

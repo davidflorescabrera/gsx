@@ -56,30 +56,30 @@ servidor)
 		if [ ! -d /home/remots ]; then
 			mkdir /home/remots
 		fi
-		echo -e "[!] Es crearan 3 usuaris (usuari1, usuari2 i usuari3 amb els directoris a /home/remots, UID=2000 i pass=login)\n"
+		echo -e "[!] Es crearan 3 usuaris (usuari1, usuari2 i usuari3 amb els directoris a /home/remots, UID=200X (on X és 1, 2 o 3) i pass=login)\n"
 		cryptedpass=$(openssl passwd -crypt -salt u usuari1)
-		useradd -m -d /home/remots/usuari1 -p "$cryptedpass" -u 2000 usuari1
+		useradd -m -d /home/remots/usuari1 -p "$cryptedpass" -u 2001 usuari1
 		cryptedpass=$(openssl passwd -crypt -salt u usuari2)
-		useradd -m -d /home/remots/usuari2 -p "$cryptedpass" -u 2000 usuari2
+		useradd -m -d /home/remots/usuari2 -p "$cryptedpass" -u 2002 usuari2
 		cryptedpass=$(openssl passwd -crypt -salt u usuari3)
-		useradd -m -d /home/remots/usuari3 -p "$cryptedpass" -u 2000 usuari3
+		useradd -m -d /home/remots/usuari3 -p "$cryptedpass" -u 2003 usuari3
 	fi
 	
 	#apt-get install nis -> demana domini (L1E.gsx) (es pot modificar (dpkg-reconfigure nis o /etc/defaultdomain)) COM HO FEM?
-	cp -p "pathFiles"/nis-sv /etc/default/nis
-	cp -p "pathFiles"/ypserv.securenets /etc/ypserv.securenets
-	cp -p "pathFiles"/hosts /etc/hosts
+	cp -p "$pathFiles"/nis-sv /etc/default/nis
+	cp -p "$pathFiles"/ypserv.securenets /etc/ypserv.securenets
+	cp -p "$pathFiles"/hosts /etc/hosts
 	sed -i 's/%%IP%%/'$4'/g' /etc/hosts
-	cp -p "pathFiles"/Makefile /var/yp/Makefile #configurem UID min i max segons volguem (per detectar després els clients a connectar)
+	cp -p "$pathFiles"/Makefile /var/yp/Makefile #configurem UID min i max segons volguem (per detectar després els clients a connectar)
 		#També podrem veure relacionat BD que NIS podrà exportar (ALL= passwd....)
 	service ypserv restart
 	make -C /var/yp/
-	cp -p "pathFiles"/exports /etc/exports #Conté les carpetes a compartir juntament amb amfitrions+modes
+	cp -p "$pathFiles"/exports /etc/exports #Conté les carpetes a compartir juntament amb amfitrions+modes
 	service nfs-kernel-server restart
 	;;
 client)
 	# Comprovació que es tenen tots els fitxers
-	files=( "nis-cl", "nsswitch.conf")
+	files=( "nis-cl" "nsswitch.conf")
 	paquets=( "nfs-common" "nis")
 	for i in "${files[@]}"
 	do
@@ -98,7 +98,7 @@ client)
 	# Fi comprovació
 	
 	echo "ypserver $5" >> /etc/yp.conf
-	cp -p "pathFiles"/nsswitch.conf /etc/nsswitch.conf
+	cp -p "$pathFiles"/nsswitch.conf /etc/nsswitch.conf
 	echo "+::::::" >> /etc/passwd
 	echo "+:::" >> /etc/group
 	echo "+::::::::" >> /etc/shadow
@@ -107,5 +107,4 @@ client)
 		# obrir consola i autentificar-te com a qualsevol usuari
 	mount -t nfs "$5":/dades/origen /dades/desti
 	echo "$5:/dades/origen /dades/desti nfs defaults 0 0" >> /etc/fstab # si no volem temporal s'ha de descomentar aquesta línia
-	;;
-
+esac

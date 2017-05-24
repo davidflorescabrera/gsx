@@ -1,13 +1,14 @@
 #! /bin/bash
 # Author: Joan Boronat, David Flores and Miquel Sabate
-# Version: 1.0
-# Date: 22/05/2017
+# Version: 3.0
+# Date: 24/05/2017
 # Description:
 usage="$(basename "$0") -- "
-usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) lp.sh -d virtualImpre path\n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
-Crea una impresora per convertir els fitxers a PDF i guardar-los sota el directori /mnt/mem/USER/DocsPDF \n
+usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) lp.sh -d virtualImpre path_fitxer\n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
+Substitueix la comanda lp del sistema, té les mateixes funcions però al possar-li el paràmetre -d i la impressora 'virtualImpre'
+ens demani contrasenya de l'usuari que estigui executant la comanda.
 Ubicació de l'script: /GSX\n
-Permisos: 744 (propietari pot llegir, escriure i executar l'script. Grup i altres només poden llegir-lo.)"
+Permisos: 755 (propietari pot llegir, escriure i executar l'script. Grup i altres només poden llegir-lo.)"
 
 #Comanda help
 if [ "$1" == "-h" ] || [ "$1" == "help" ]; then
@@ -23,6 +24,8 @@ fi
 
 #Abans d'haver realitzat això hauriem de tenir ja el login: passwd a /usr/local/secret
 if [ "$2" == "virtualImpre" ]; then
+	#Copiem el fitxer de configuració del cups-pdf al directori del sistema
+	#cp ./cups-pdf.conf /etc/cups/cups-pdf.conf
 	if [ "$1" == "-d" ]; then
 		#Llegim contrasenya
 		read -sp "Contrasenya per l'usuari '${USER}':" password

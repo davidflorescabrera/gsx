@@ -1,13 +1,13 @@
 #! /bin/bash
 # Author: Joan Boronat, David Flores and Miquel Sabate
-# Version: 1.0
+# Version: 2.0
 # Date: 22/05/2017
 # Description:
 usage="$(basename "$0") -- "
 usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ex2dispo.sh \n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0)
 Crea una impresora per convertir els fitxers a PDF i guardar-los sota el directori /mnt/mem/USER/DocsPDF \n
 Ubicació de l'script: /GSX\n
-Permisos: 744 (propietari pot llegir, escriure i executar l'script. Grup i altres només poden llegir-lo.)"
+Permisos: 755 (propietari pot llegir, escriure i executar l'script. Grup i altres només poden llegir-lo.)"
 
 #Comanda help
 if [ "$1" == "-h" ] || [ "$1" == "help" ]; then
@@ -35,8 +35,6 @@ if [ ! -e /mnt/mem ]; then
 	mkdir /mnt/mem
 fi
 
-#Copiem el fitxer de configuració del cups-pdf al directori del sistema
-cp ./cups-pdf.conf /etc/cups/cups-pdf.conf
 
 #Creem la impresora virtual 
 lpadmin -p virtualImpre -E -v /mnt/mem/${USER}/DocsPDF

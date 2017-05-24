@@ -1,0 +1,29 @@
+SERVER
+	apt-get install nis -> demana domini (L1E.gsx) (es pot 			modificar (dpkg-reconfigure nis o /etc/defaultdomain))
+	/etc/default/nis -> posem NISSERVER=true i NISCLIENT=false
+	/etc/ypserv.securenets -> posar IP a la segona línia que 			volem donar accés (255.255.255.0 192.168.0.0)
+	/etc/hosts -> afegim 127.0.0.1 servidor-nis
+	/var/yp/Makefile -> configurem UID min i max segons volguem 			(per detectar després els clients a connectar)
+		També podrem veure relacionat BD que NIS podrà 			exportar (ALL= passwd....)
+	service ypserv restart
+	make -C /var/yp/
+
+CLIENT
+	igual que client pero posant true a NISCLIENT i false a 		NISSERVER
+	/etc/yp.conf -> afegim ypserver 192.168.0.10
+	/etc/nsswitch.conf -> passwd: files nis | group i shadow 			igual | hosts: files nis mdns4_minimal 			[NOTFOUND=return] dns
+	/etc/passwd -> +::::::
+	/etc/group -> +:::
+	/etc/shadow -> +::::::::
+	service ypbind restart (ypwich per saber quins clients hi ha 			disponibles al sv)
+	obrir consola i autentificar-te com a qualsevol usuari
+	(*)exportar a través de NFS per tenir-ho al propi PC
+
+(*) 	apt-get install nfs-kernel-server (servidor)
+	apt-get install nfs-common (client)
+	SERVER	
+		/etc/exports -> afegir /etc/remots *(rw)
+		service nfs-kernel-server restart
+	CLIENT
+		mount -t nfs 192.168.0.50:/dades/origen /dades/desti
+		/etc/fstab -> afegir si no volem temporal -> 				192.168.0.50:/dades/origen /dades/desti nfs defaults 0 0

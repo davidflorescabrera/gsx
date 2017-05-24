@@ -1,0 +1,80 @@
+-----* NFS: *-----
+apt-get install nfs-common nfs-kernel-server (nfs-client?)
+
+Arxiu configuració server NFS: /etc/exports
+	|-> Línies arxiu: - Carpeta que es vol compartir (1)
+	|		  - Mode que es comparteix (lectura 'ro', lectura i escriptura 'rw') (2)
+	|		  - Des de quin PC o PCs es permet l'accés (nom o IP/rang IPs) (3)
+	|
+	|-> (1) - /home/remots (compartit amb NIS)
+	    (2) - Depèn del que volguem (si no necessiten escriure fem ro) -> /tmp *(ro) (compartir tmp amb tothom en mode read-only)
+	    (3) - /var/log 192.168.2.5(ro) (compartir /var/log al PC amb IP especificada en mode ro)
+
+No cal, però si és necessari cal arrencar serveis: service rpcbind / nfslock start (per defecte nivells 3, 4, 5. Quins nivells volem?)
+
+Per posar-ho al 3 i  només, per exemple, fem: chkconfig --level 35 nfs on
+
+Estàndard mode per aturar i encendre és: service nfs start / reload /restart / stop / status
+
+Podríem tenir problemes amb firewall i ports.
+
+--- /etc/exports ---
+/directori/a/compartir amfitrions(opcions) -> manual: man 5 exports
+Exemple: /home 192.168.2.0/24(rw) (hi ha més opcions, mirar links del final)
+
+Per veure clients connectats al sv: showmount (-a si volem veure directoris)
+
+-----* NIS: *-----
+apt-get install nis (ens demana nom domini, com ho fem per fer-ho mitjançant script?????) (es pot modificar domini fent dpkg-reconfigure nis o a /etc/defaultdomain)
+
+Per definir rol anar a /etc/default/nis (NISSERVER=true/false i NISCLIENT=true/false) (Qui fa de server?? la màquina de l'script??)
+
+Restricció seguretat anar a /etc/ypserv.securenets
+
+Hosts(domini) anar a /etc/hosts
+
+Config. users-grups 
+
+CLIENT: igual per instal·lar i un cop fet anar a /etc/yp.conf i afegir la ip del server (ypserver 192.168.2.1)
+
+Prioritats anar a /etc/nsswitch.conf -> passwd: files nis (enter) group: files nis (enter) shadow: files nis (així és per si no troba un usuari e la base de dades, buscarà al servidor NIS) || hosts: files nis mdns4_minimal [NOTFOUND=return] dns (buscarà a /etc/hosts, si no a nis i si no a DNS)
+
+Si modifiquem fitxers passwd, group, i shadow, li diem que busqui al NIS:
+	/etc/passwd -> afegim +::::::
+	/etc/group -> +:::
+	/etc/shadow -> +:::::::: 
+	(núm. punts té relació amb núm. camps fitxers)
+
+service ypbind restart
+ypwich
+
+--------------------------
+ALTRES:
+Usuaris han de crear-se al servidor. Si fem ypcat passwd des de client sortiran tots els clients del sv amb els quals et pots connectar. QUan et connectes el servidor NFS ha de muntar el directori del servidor al pc del client. Com? SUERTE!
+
+	SV: /etc/exports afegim carpetes a compartir (vigilar amb permisos locals, es tenen en compte)
+		permisos aplicables: 	
+				- ro: permisos de sólo lectura, si no se especifica nada por defecto se aplica este permiso.
+				- rw: permisos de escritura.
+				- root_squash: mapeo de la identidad del usuario root por seguridad. Cuando se conecta el cliente con usuario root a 					la carpeta compartida, la UID del usuario root será mapeada por la de un usuario anónimo del equipo servidor, así no 					podrá ser usuario root en el equipo servidor. Por defecto esta opción viene activada si no se especifica lo 					contrario.
+				- no_root_squash: no se mapeará la identidad del usuario root, por lo que el usuario root cliente también lo sera en 					el recurso compartido del servidor.
+				- all_squash: la UID de cualquier usuario del equipo cliente será reemplazada por una UID anónima del equipo 					servidor.
+				- no_all_squash: opción dada por defecto, no serán mapeadas las UID del los usuarios.
+				- squash_uids: se puede poner una UID o un rango de UIDs para que sean mapeadas como usuario anónimo. También se 					puede aplicar a grupos squash_gids.
+				- anonuid: se puede mapear la identidad del o de los usuarios a la que tu quieras especificarle. Muy útil si quieres 					compartir un directorio pero quieras saber desde que máquina se está escribiendo. Para grupos anongid.
+
+service nfs-kernel-server restart
+
+MUNTAR RECURSOS DES DE CLIENT:
+mount -t nfs 192.168.0.50:/etc/remots /mnt/dadesclient (aquí accedim de forma temporal (ens interessa?))
+Si no volem temportal anem a /etc/fstab i afegim: 192.168.0.50:/etc/remots /mnt/dadesclient nfs defaults 0 0 (punt muntatge permanent)
+
+----------------------------
+LINKS:
+https://enekoamieva.com/servidor-nis-en-linux-configuracion-y-funcionamiento/
+https://enekoamieva.com/nfs-sistema-de-archivos-compartidos-en-linux/
+
+
+
+
+	

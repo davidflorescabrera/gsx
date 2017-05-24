@@ -24,8 +24,6 @@ fi
 
 #Abans d'haver realitzat això hauriem de tenir ja el login: passwd a /usr/local/secret
 if [ "$2" == "virtualImpre" ]; then
-	#Copiem el fitxer de configuració del cups-pdf al directori del sistema
-	#cp ./cups-pdf.conf /etc/cups/cups-pdf.conf
 	if [ "$1" == "-d" ]; then
 		#Llegim contrasenya
 		read -sp "Contrasenya per l'usuari '${USER}':" password

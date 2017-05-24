@@ -5,7 +5,7 @@
 # Description:
 usage="$(basename "$0") -- "
 usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ./nfs-nis.sh rol pathFitxers pathScripts IPpropia [ipserver]\nOn el rol pot ser client o servidor. Si es client a mes a mes s'ha d'especificar la IP del servidor.
-\n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0) descripció
+\n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0) L'script en mode servidor crea un servidor NIS i NFS
 Ubicació de l'script: /gsx\n
 Permisos: 744 (propietari pot llegir, escriure i executar l'script. Grup i altres només poden llegir-lo.)"
 
@@ -49,6 +49,21 @@ servidor)
 		apt-get install "$i"
 	done
 	# Fi comprovació
+
+	# Creació usuaris (en cas de confirmar)
+	read -p "Vols crear els 3 usuaris remots? [s/n]" </dev/tty
+	if [[ $REPLY =~ [sSyY] ]]; then
+		if [ ! -d /home/remots ]; then
+			mkdir /home/remots
+		fi
+		echo -e "[!] Es crearan 3 usuaris (usuari1, usuari2 i usuari3 amb els directoris a /home/remots, UID=2000 i pass=login)\n"
+		cryptedpass=$(openssl passwd -crypt -salt u usuari1)
+		useradd -m -d /home/remots/usuari1 -p "$cryptedpass" -u 2000 usuari1
+		cryptedpass=$(openssl passwd -crypt -salt u usuari2)
+		useradd -m -d /home/remots/usuari2 -p "$cryptedpass" -u 2000 usuari2
+		cryptedpass=$(openssl passwd -crypt -salt u usuari3)
+		useradd -m -d /home/remots/usuari3 -p "$cryptedpass" -u 2000 usuari3
+	fi
 	
 	#apt-get install nis -> demana domini (L1E.gsx) (es pot modificar (dpkg-reconfigure nis o /etc/defaultdomain)) COM HO FEM?
 	cp -p "pathFiles"/nis-sv /etc/default/nis
@@ -90,7 +105,7 @@ client)
 	service ypbind restart 
 		# ypwich per saber quins clients hi ha disponibles al sv)
 		# obrir consola i autentificar-te com a qualsevol usuari
-	# mount -t nfs "$5":/dades/origen /dades/desti
-	# echo "$5:/dades/origen /dades/desti nfs defaults 0 0" >> /etc/fstab # si no volem temporal s'ha de descomentar aquesta línia
+	mount -t nfs "$5":/dades/origen /dades/desti
+	echo "$5:/dades/origen /dades/desti nfs defaults 0 0" >> /etc/fstab # si no volem temporal s'ha de descomentar aquesta línia
 	;;
 

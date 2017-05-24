@@ -13,4 +13,4 @@
 255.0.0.0	127.0.0.0
 
 # This line gives access to everybody. PLEASE ADJUST!
-255.255.255.0		192.168.0.0
+255.255.255.0		10.21.1.0

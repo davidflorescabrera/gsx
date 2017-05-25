@@ -29,5 +29,9 @@ if [ ! -e /mnt/mem ]; then
 fi
 #Montem el disc virtual tmpfs de 100 MB (s'especifica per paràmetre el tamany del disc a crear)
 mount -t tmpfs -o size="$size"m tmpfs /mnt/mem
-
+if [ $? -ne 0 ]; then
+	echo -e "No s'ha pogut crear el disc"
+	exit 1
+else
 echo -e "S'ha creat un disc virtual a memòria de $size MB"
+fi

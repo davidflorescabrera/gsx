@@ -4,8 +4,8 @@
 # Date: 22/05/2017
 # Description:
 usage="$(basename "$0") -- "
-usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ./nfs-nis.sh rol pathFitxers pathScripts IPpropia [ipserver]\nOn el rol pot ser client o servidor. Si es client a mes a mes s'ha d'especificar la IP del servidor.
-\n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0) L'script en mode servidor crea un servidor NIS i NFS
+usage="\n$(tput bold)FORMA D'ÚS:  $(tput sgr0) ./nfs-nis.sh rol pathFitxers IPpropia [ipserver]\nOn el rol pot ser client o servidor. Si es client a mes a mes s'ha d'especificar la IP del servidor.
+\n\n$(tput bold)DESCRIPCIÓ:$(tput sgr0) L'script en mode servidor crea un servidor NIS i NFS. En mode client crea un link (amb mount) entre la carpeta /home/remots del servidor i una carpeta (que crea si no existeix) anomenada nfs-nisClientFiles a /home.
 Ubicació de l'script: /gsx\n
 Permisos: 744 (propietari pot llegir, escriure i executar l'script. Grup i altres només poden llegir-lo.)"
 
@@ -15,7 +15,7 @@ if [ "$1" == "-h" ] || [ "$1" == "help" ]; then
 	exit 0
 fi
 
-if ! (([ "$1" == "client" ] && [ $# -eq 5 ]) || ([ "$1" == "servidor" ] && [ $# -eq 4 ]));then
+if ! (([ "$1" == "client" ] && [ $# -eq 4 ]) || ([ "$1" == "servidor" ] && [ $# -eq 3 ]));then
 		echo -e "Ús: ./nfs-nis.sh rol pathFitxers pathScripts IPpropia [ipserver]\nOn el rol pot ser client o servidor. Si es client a mes a mes s'ha d'especificar la IP del servidor."
 	exit 1
 fi
@@ -27,7 +27,6 @@ if [ $EUID -ne 0 ]; then
 fi
 
 pathFiles="$2"
-pathScripts="$3"
 
 case $1 in
 servidor)
@@ -65,13 +64,11 @@ servidor)
 		useradd -m -d /home/remots/usuari3 -p "$cryptedpass" -u 2003 usuari3
 	fi
 	
-	#apt-get install nis -> demana domini (L1E.gsx) (es pot modificar (dpkg-reconfigure nis o /etc/defaultdomain)) COM HO FEM?
 	cp -p "$pathFiles"/nis-sv /etc/default/nis
 	cp -p "$pathFiles"/ypserv.securenets /etc/ypserv.securenets
 	cp -p "$pathFiles"/hosts /etc/hosts
-	sed -i 's/%%IP%%/'$4'/g' /etc/hosts
-	cp -p "$pathFiles"/Makefile /var/yp/Makefile #configurem UID min i max segons volguem (per detectar després els clients a connectar)
-		#També podrem veure relacionat BD que NIS podrà exportar (ALL= passwd....)
+	sed -i 's/%%IP%%/'$3'/g' /etc/hosts
+	cp -p "$pathFiles"/Makefile /var/yp/Makefile
 	service ypserv restart
 	make -C /var/yp/
 	cp -p "$pathFiles"/exports /etc/exports #Conté les carpetes a compartir juntament amb amfitrions+modes
@@ -96,15 +93,16 @@ client)
 		apt-get install "$i"
 	done
 	# Fi comprovació
-	
-	echo "ypserver $5" >> /etc/yp.conf
+	cp -p "$pathFiles"/nis-sv /etc/default/nis
+	echo "ypserver $4" >> /etc/yp.conf
 	cp -p "$pathFiles"/nsswitch.conf /etc/nsswitch.conf
 	echo "+::::::" >> /etc/passwd
 	echo "+:::" >> /etc/group
 	echo "+::::::::" >> /etc/shadow
 	service ypbind restart 
-		# ypwich per saber quins clients hi ha disponibles al sv)
-		# obrir consola i autentificar-te com a qualsevol usuari
-	mount -t nfs "$5":/dades/origen /dades/desti
-	echo "$5:/dades/origen /dades/desti nfs defaults 0 0" >> /etc/fstab # si no volem temporal s'ha de descomentar aquesta línia
+	if [ ! -d /home/nfs-nisClientFiles ]; then
+			mkdir /home/nfs-nisClientFiles
+		fi
+	mount -t nfs "$4":/home/remots /home/nfs-nisClientFiles
+	echo "$4:/home/remots /home/nfs-nisClientFiles nfs defaults 0 0" >> /etc/fstab
 esac

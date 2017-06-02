@@ -19,7 +19,7 @@ iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A INPUT -p TCP -s 192.168.2.253 --destination-port 22 -j ACCEPT
 
 #Implementa SNAT amb les connexions originades a la xarxa interna
-iptables -t nat -A POSTROUTING -i eth1 -o eth0 -s 192.168.3.0/24 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o eth0 -s 192.168.3.0/24 -j MASQUERADE
 
 #Pot accedir als servidors d'actualització de Debian. Mireu el fitxer /etc/apt/sources.list per veure els noms dels servidors i protocols. 
 iptables -A OUTPUT -p TCP -d 212.211.132.32,212.211.132.250,195.20.242.89,217.196.149.233,82.194.78.250 --destination-port 80 -j ACCEPT
